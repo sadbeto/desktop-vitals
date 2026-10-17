@@ -2,6 +2,7 @@
 """Square monochrome desktop telemetry for Xfce."""
 import argparse
 import json
+import textwrap
 from metrics import Sampler
 
 
@@ -70,7 +71,7 @@ def main():
     grid.set_column_spacing(12)
     grid.set_row_spacing(10)
     grid.set_column_homogeneous(True)
-    grid.set_row_homogeneous(True)
+    grid.set_row_homogeneous(False)
     root.pack_start(grid, True, True, 0)
 
     def section(title, col, row):
@@ -96,6 +97,7 @@ def main():
     disk, _ = metric(performance, 'DISK')
 
     graphics = section('GRAPHICS', 1, 0)
+    graphics.set_spacing(2)
     gpu_rows = []
     for _ in range(2):
         gpu_name = txt('—', 'dim')
@@ -142,7 +144,8 @@ def main():
                     name.set_text('NO GPU DETECTED' if not d['gpus'] else '')
                     reading.set_text('')
                     continue
-                name.set_text(gpu['name'][:21])
+                name.set_text('\n'.join(textwrap.wrap(gpu['name'], width=20, break_long_words=True)))
+                name.set_tooltip_text(gpu['name'])
                 usage = f"{gpu['usage']:.0f}%" if gpu['usage'] is not None else '—%'
                 temp = f"{gpu['temp']:.0f}°" if gpu['temp'] is not None else '—°'
                 used, total = gpu['vram_used'], gpu['vram_total']
