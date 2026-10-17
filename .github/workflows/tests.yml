@@ -1,0 +1,17 @@
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python syntax and unit tests
+        run: |
+          python3 -m compileall -q app.py metrics.py test_metrics.py
+          python3 -m unittest discover -v
+      - name: Probe on Linux runner
+        run: python3 app.py --probe
