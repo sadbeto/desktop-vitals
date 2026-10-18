@@ -10,7 +10,7 @@ from metrics import Sampler
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--probe', action='store_true')
-    ap.add_argument('--monitor', type=int, default=0, help='display index; 0 is primary')
+    ap.add_argument('--monitor', type=int, default=0, help='display index (default: 0)')
     args = ap.parse_args()
     if args.probe:
         print(json.dumps(Sampler().sample(), indent=2))
@@ -113,8 +113,8 @@ def main():
     details = section('SYSTEM / NETWORK', 0, 1)
     cpu_temp, _ = metric(details, 'CPU TEMP')
     fan, _ = metric(details, 'FANS')
-    down, _ = metric(details, 'DOWN')
-    up, _ = metric(details, 'UP')
+    down, _ = metric(details, 'RX')
+    up, _ = metric(details, 'TX')
     mem_detail = txt('—', 'dim')
     details.pack_end(mem_detail, False, False, 0)
 
@@ -156,7 +156,12 @@ def main():
                 vram = f'{used / 1024:.1f}/{total / 1024:.0f}G' if used is not None and total and total >= 1024 else (f'{used:.0f}/{total:.0f}M' if used is not None and total else 'VRAM —')
                 reading.set_text(f'{usage}  {temp}  {vram}')
             a, b = d['cpu_fan'], d['gpu_fan']
-            fan.set_text(f'{a:.0f}/{b:.0f}' if a is not None and b is not None else 'N/A')
+            readings = []
+            if a is not None:
+                readings.append(f'CPU {a:.0f}')
+            if b is not None:
+                readings.append(f'GPU {b:.0f}')
+            fan.set_text(' / '.join(readings) if readings else 'N/A')
             net = d['network']
             down.set_text(human_rate(net[0]) if net else '…')
             up.set_text(human_rate(net[1]) if net else '…')

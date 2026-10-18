@@ -63,10 +63,11 @@ def gpu_devices():
 
     devices = []
     nvidia_seen = False
-    if shutil.which('nvidia-smi'):
+    nvidia_smi = shutil.which('nvidia-smi')
+    if nvidia_smi:
         try:
             result = subprocess.run(
-                ['nvidia-smi', '--query-gpu=name,utilization.gpu,temperature.gpu,memory.used,memory.total',
+                [nvidia_smi, '--query-gpu=name,utilization.gpu,temperature.gpu,memory.used,memory.total',
                  '--format=csv,noheader,nounits'], capture_output=True, text=True,
                 timeout=2, check=True)
             for line in result.stdout.splitlines():
