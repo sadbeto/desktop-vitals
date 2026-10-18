@@ -3,6 +3,7 @@
 import argparse
 import json
 import textwrap
+from pathlib import Path
 from metrics import Sampler
 
 
@@ -41,7 +42,10 @@ def main():
             item.get_style_context().add_class(style)
         return item
 
+    icon = Path(__file__).resolve().parent / 'assets' / 'desktop-vitals.svg'
     win = Gtk.Window(title='Desktop Vitals')
+    if icon.is_file():
+        win.set_icon_from_file(str(icon))
     win.set_default_size(370, 365)
     win.set_resizable(False)
     win.set_type_hint(Gdk.WindowTypeHint.UTILITY)

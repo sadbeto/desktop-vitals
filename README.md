@@ -10,6 +10,17 @@ A small monochrome Linux desktop monitor. It shows CPU, RAM, disk, temperatures,
 
 No pip packages, root privileges, daemon, or account are required at runtime.
 
+## Install for your user
+
+```bash
+/usr/bin/python3 install.py             # primary monitor
+/usr/bin/python3 install.py --monitor 1 # second monitor
+```
+
+Open **Desktop Vitals** from the applications menu. The monochrome monitor/pulse logo is included as an SVG and used by the launcher and window. Installation copies the app into `$XDG_DATA_HOME/desktop-vitals` (default `~/.local/share/desktop-vitals`), with a launcher in `applications/` and an icon in `icons/hicolor/scalable/apps/`. No root, packages, autostart, services, or system settings are changed. Run the installer again after updates; close and reopen the widget to load the new copy.
+
+To uninstall, remove those three user-local items: `desktop-vitals/`, `applications/desktop-vitals.desktop`, and `icons/hicolor/scalable/apps/desktop-vitals.svg` within your data directory. The source checkout is unaffected.
+
 ## Run
 
 ```bash
